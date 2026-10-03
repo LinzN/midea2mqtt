@@ -44,7 +44,11 @@ cd midea2mqtt
 mvn clean package
 ```
 
-This builds one self-contained jar, `target/midea2mqtt.jar`. Let it find your units and write them into
+This builds `target/midea2mqtt.jar` and copies all libraries to `target/lib/`. The jar loads them from the `lib`
+folder next to it, so when you move the bridge somewhere else, copy `midea2mqtt.jar` together with the whole `lib`
+folder.
+
+Let it find your units and write them into
 `config.yml`:
 
 ```bash
@@ -63,7 +67,7 @@ as `ac-<id>`. Entries for units that weren't found stay untouched, and the examp
 are left empty.
 
 V2 units work right away. **V3 units need a token and key** before they connect; until then the bridge skips them
-with a warning. The jar contains the midea-ac command line tool, which fetches them:
+with a warning. The midea-ac command line tool, reachable through the same jar, fetches them:
 
 ```bash
 java -jar target/midea2mqtt.jar keys --ip 192.168.1.50 --cloud msmart --user you@example.com --password secret
