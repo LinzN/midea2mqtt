@@ -9,6 +9,12 @@ Built on [midea-ac](https://github.com/LinzN/midea-ac), so it supports the same 
 using Midea indoor units and Wi-Fi modules (Comfee, Inventor, Carrier, Toshiba, Electrolux, Pro Klima, ...), protocol
 V2 and V3.
 
+> **More in the [wiki](https://github.com/LinzN/midea2mqtt/wiki):** step-by-step setup, the full
+> [state](https://github.com/LinzN/midea2mqtt/wiki/Reading-State) and
+> [command](https://github.com/LinzN/midea2mqtt/wiki/Sending-Commands) reference, a ready-to-use
+> [Home Assistant](https://github.com/LinzN/midea2mqtt/wiki/Home-Assistant) configuration, and
+> [troubleshooting](https://github.com/LinzN/midea2mqtt/wiki/Troubleshooting) for common problems.
+
 ---
 
 ## How It Works
