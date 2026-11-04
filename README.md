@@ -136,7 +136,10 @@ java -jar target/midea2mqtt.jar
 ```
 
 The first refresh of a unit can take up to a minute: the API probes which optional queries (energy, humidity, service
-data, capabilities) the unit answers. After that a refresh takes well under a second.
+data, capabilities) the unit answers. After that a refresh takes well under a second. If a refresh marks a unit
+unavailable, the bridge resets the API's protocol-probe cache. Optional queries that may have been skipped after a
+temporary communication failure are then probed again when the unit responds. This recovery is triggered by an
+unavailable transition; it does not periodically retry optional queries while the unit remains available.
 
 ---
 

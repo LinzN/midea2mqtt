@@ -84,6 +84,12 @@ public class DeviceBridge {
             lastAvailable = available;
             mqtt.publishRetained(topic + "/availability", available ? "online" : "offline");
             LOG.info("Device '" + settings.name() + "' is " + (available ? "online" : "offline"));
+            if (!available) {
+                ac.resetProtocolProbe();
+                capabilitiesPublished = false;
+                LOG.fine("Reset protocol probe for device '" + settings.name()
+                        + "'; optional queries will be retried after reconnect");
+            }
         }
         if (!available) {
             return;
