@@ -136,7 +136,8 @@ java -jar target/midea2mqtt.jar
 ```
 
 The first refresh of a unit can take up to a minute: the API probes which optional queries (energy, humidity, service
-data, capabilities) the unit answers. After that a refresh takes well under a second.
+data, capabilities) the unit answers. After that a refresh takes well under a second. If an optional query has
+answered successfully before, `midea-ac` retries it on later refreshes even if an individual request times out.
 
 ---
 
@@ -189,6 +190,7 @@ Example `state`:
 
 (shortened). Temperatures are always Celsius. Values the unit doesn't report (energy, humidity, service data such as
 `compressorFrequency` or coil temperatures on many units) are left out rather than sent as `null`.
+If a previously reported optional value is missing from a later snapshot, the bridge keeps its last reported value.
 
 ### Writing
 

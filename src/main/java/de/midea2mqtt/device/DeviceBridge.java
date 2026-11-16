@@ -46,6 +46,7 @@ public class DeviceBridge {
 
     private volatile Boolean lastAvailable;
     private volatile boolean capabilitiesPublished;
+    private JSONObject lastPublishedState;
 
     public DeviceBridge(DeviceSettings settings, MqttManager mqtt) {
         this.settings = settings;
@@ -88,11 +89,23 @@ public class DeviceBridge {
         if (!available) {
             return;
         }
-        JSONObject json = StateMapper.state(state);
-        mqtt.publishState(topic + "/state", json);
+        publishState(state);
         if (!capabilitiesPublished && ac.getCapabilities().isReceived()) {
             publishCapabilities();
         }
+    }
+
+    private synchronized void publishState(AcState state) {
+        JSONObject json = StateMapper.state(state);
+        if (lastPublishedState != null) {
+            for (String key : lastPublishedState.keySet()) {
+                if (!json.has(key)) {
+                    json.put(key, lastPublishedState.get(key));
+                }
+            }
+        }
+        lastPublishedState = json;
+        mqtt.publishState(topic + "/state", json);
     }
 
     private void publishCapabilities() {
@@ -107,7 +120,7 @@ public class DeviceBridge {
             mqtt.publishRetained(topic + "/availability", available ? "online" : "offline");
         }
         if (Boolean.TRUE.equals(available)) {
-            mqtt.publishState(topic + "/state", StateMapper.state(ac.getState()));
+            publishState(ac.getState());
         }
         if (capabilitiesPublished) {
             publishCapabilities();
