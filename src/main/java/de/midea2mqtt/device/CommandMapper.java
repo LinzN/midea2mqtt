@@ -43,13 +43,13 @@ public final class CommandMapper {
     /** Keys handled by {@link AcControl}, sent together as one command. */
     static final Set<String> BASIC_KEYS = Set.of(
             "power", "mode", "targetTemperature", "fanSpeed", "swing", "preset",
-            "powerSaving", "auxHeating", "dry", "smartEye", "naturalWind", "anion", "fahrenheit");
+            "powerSaving", "auxHeating", "dry", "smartEye", "naturalWind", "anion", "fahrenheit", "followMe");
 
     /** Keys that the API sends as their own command. */
     static final Set<String> EXTRA_KEYS = Set.of(
             "screenDisplay", "screenDisplayAlternate", "breezeless", "indirectWind",
             "horizontalVane", "verticalVane", "outdoorSilent", "sound", "selfClean",
-            "rateSelect", "freshAir", "freshAirFanSpeed");
+            "rateSelect", "freshAir", "freshAirFanSpeed", "followMeTemperature");
 
     private CommandMapper() {
     }
@@ -127,7 +127,7 @@ public final class CommandMapper {
                 case "horizontalVane" -> enumValue(Vane.Horizontal.class, raw);
                 case "verticalVane" -> enumValue(Vane.Vertical.class, raw);
                 case "fanSpeed" -> fanSpeed(raw);
-                case "targetTemperature" -> number(raw).doubleValue();
+                case "targetTemperature", "followMeTemperature" -> number(raw).doubleValue();
                 case "rateSelect", "freshAirFanSpeed" -> integer(raw);
                 default -> bool(raw);
             };
@@ -157,6 +157,7 @@ public final class CommandMapper {
             case "naturalWind" -> c.naturalWind((Boolean) v);
             case "anion" -> c.anion((Boolean) v);
             case "fahrenheit" -> c.fahrenheitDisplay((Boolean) v);
+            case "followMe" -> c.followMe((Boolean) v);
             default -> {
                 // extra keys are handled separately
             }
@@ -176,6 +177,8 @@ public final class CommandMapper {
             case "sound" -> ac.setSound((Boolean) v);
             case "selfClean" -> ac.setSelfClean((Boolean) v);
             case "rateSelect" -> ac.setRateSelect((Integer) v);
+            // experimental in midea-ac, see its README
+            case "followMeTemperature" -> ac.sendFollowMeTemperature((Double) v);
             case "freshAir" -> {
                 boolean on = (Boolean) v;
                 Integer speed = (Integer) all.get("freshAirFanSpeed");

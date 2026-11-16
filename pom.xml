@@ -18,7 +18,7 @@
 
     <groupId>de.linzn</groupId>
     <artifactId>midea2mqtt</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>Midea2MQTT</name>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>de.mirranet</groupId>
             <artifactId>midea-ac</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.paho</groupId>

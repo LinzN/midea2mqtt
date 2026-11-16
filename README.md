@@ -221,6 +221,8 @@ mosquitto_pub -t midea2mqtt/livingroom/set/targetTemperature -m 21
 | `rateSelect`             | power limit: 1, 20, 40, 60, 80, 100 (or 50, 75, 100 on two-level units)   |
 | `freshAir`               | boolean, fresh air module                                                  |
 | `freshAirFanSpeed`       | 0 to 100                                                                   |
+| `followMe`               | boolean, Follow Me / iSense: regulate on `followMeTemperature`             |
+| `followMeTemperature`    | room temperature from your own sensor, 0 to 37 (experimental, see below)   |
 
 Not every unit has every feature; check `capabilities` first. In a combined command `power` is applied last, so
 `{"power": false, "mode": "heat"}` changes the mode and leaves the unit off.
@@ -233,6 +235,25 @@ reaches the unit. Errors are published to `<base>/<device>/error`:
 ```
 
 The new state is published as soon as the unit confirms a command.
+
+### Follow Me (iSense)
+
+With Follow Me (iSense in some manuals) the unit regulates on a room temperature you report instead of its own
+sensor, the way the remote does over IR. Switch it on once, then keep sending your sensor's value:
+
+```bash
+mosquitto_pub -t midea2mqtt/livingroom/set/followMe -m on
+mosquitto_pub -t midea2mqtt/livingroom/set/followMeTemperature -m 21.3
+```
+
+- Send the temperature again every couple of minutes, for example from a Home Assistant automation on your sensor.
+  How long a unit keeps a value without updates is not known yet.
+- Values are rounded to 0.5. `state` shows `followMe` and the last `followMeTemperature` the bridge sent.
+- A remote in Follow Me mode within IR range overwrites the value after a few minutes.
+
+**Experimental:** reporting the temperature over the network is not part of midea-local and was tested on a few Midea
+models only. See [midea-ac](https://github.com/LinzN/midea-ac#follow-me-isense) for details, and please report whether
+it works on your unit.
 
 ---
 

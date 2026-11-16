@@ -56,6 +56,9 @@ public final class StateMapper {
         j.put("naturalWind", s.isNaturalWind());
         j.put("anion", s.isAnion());
         j.put("fahrenheit", s.isFahrenheit());
+        j.put("followMe", s.isFollowMe());
+        // last value this bridge sent; the unit doesn't report it back
+        putOpt(j, "followMeTemperature", s.getFollowMeTemperature());
         j.put("screenDisplay", s.isScreenDisplay());
         j.put("screenDisplayAlternate", s.isScreenDisplayAlternate());
         j.put("breezeless", s.isBreezeless());
