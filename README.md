@@ -251,12 +251,15 @@ mosquitto_pub -t midea2mqtt/livingroom/set/followMe -m off   # back to the built
   How long a unit keeps a value without updates is not known yet.
 - Values are rounded to 0.5. `state` shows `followMe` (also when the remote switched it on) and the last
   `followMeTemperature` the bridge sent. A value the remote sends over IR is not reported separately.
-- A unit that takes the value reports it as `indoorTemperature`, the temperature it regulates on.
-  `indoorAmbientTemperature` stays the reading of the built-in sensor.
+- If the unit doesn't confirm Follow Me, the bridge logs a warning and doesn't switch it on again with later
+  reports (each attempt is a full command, so the unit would beep every time).
+- A unit that takes the value reports it as `indoorTemperature`, the temperature it regulates on. On some units
+  `indoorAmbientTemperature` follows it as well.
 - A remote in Follow Me mode within IR range overwrites the value after a few minutes.
 
 **Experimental:** reporting the temperature over the network is not part of midea-local and was tested on a few Midea
-models only, and did not work on a Midea PortaSplit in a first test. See [midea-ac](https://github.com/LinzN/midea-ac#follow-me-isense) for details, and please report whether
+models only. It does not work on a Midea PortaSplit (`2060008E`): the unit ignores Follow Me over Wi-Fi, but
+switched on with the remote it works and shows up correctly in `state`. See [midea-ac](https://github.com/LinzN/midea-ac#follow-me-isense) for details, and please report whether
 it works on your unit.
 
 ---
