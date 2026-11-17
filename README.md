@@ -136,7 +136,8 @@ java -jar target/midea2mqtt.jar
 ```
 
 The first refresh of a unit can take up to a minute: the API probes which optional queries (energy, humidity, service
-data, capabilities) the unit answers. After that a refresh takes well under a second.
+data, capabilities) the unit answers. After that a refresh takes well under a second. If an optional query has
+answered successfully before, `midea-ac` retries it on later refreshes even if an individual request times out.
 
 ---
 
