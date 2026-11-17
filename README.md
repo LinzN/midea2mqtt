@@ -239,20 +239,23 @@ The new state is published as soon as the unit confirms a command.
 ### Follow Me (iSense)
 
 With Follow Me (iSense in some manuals) the unit regulates on a room temperature you report instead of its own
-sensor, the way the remote does over IR. Switch it on once, then keep sending your sensor's value:
+sensor, the way the remote does over IR. Keep sending your sensor's value; the first one also switches Follow Me on:
 
 ```bash
-mosquitto_pub -t midea2mqtt/livingroom/set/followMe -m on
 mosquitto_pub -t midea2mqtt/livingroom/set/followMeTemperature -m 21.3
+mosquitto_pub -t midea2mqtt/livingroom/set/followMe -m off   # back to the built-in sensor
 ```
 
 - Send the temperature again every couple of minutes, for example from a Home Assistant automation on your sensor.
   How long a unit keeps a value without updates is not known yet.
-- Values are rounded to 0.5. `state` shows `followMe` and the last `followMeTemperature` the bridge sent.
+- Values are rounded to 0.5. `state` shows `followMe` (also when the remote switched it on) and the last
+  `followMeTemperature` the bridge sent. A value the remote sends over IR is not reported separately.
+- A unit that takes the value reports it as `indoorTemperature`, the temperature it regulates on.
+  `indoorAmbientTemperature` stays the reading of the built-in sensor.
 - A remote in Follow Me mode within IR range overwrites the value after a few minutes.
 
 **Experimental:** reporting the temperature over the network is not part of midea-local and was tested on a few Midea
-models only. See [midea-ac](https://github.com/LinzN/midea-ac#follow-me-isense) for details, and please report whether
+models only, and did not work on a Midea PortaSplit in a first test. See [midea-ac](https://github.com/LinzN/midea-ac#follow-me-isense) for details, and please report whether
 it works on your unit.
 
 ---
